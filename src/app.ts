@@ -2,7 +2,7 @@ import express from "express";
 import appLoger from "./App loger/apploger";
 import Database from "./config/database";
 
-const app = express.application;
+const app: express.Application = express()
 app.use(express.json);
 app.use(appLoger);
 
