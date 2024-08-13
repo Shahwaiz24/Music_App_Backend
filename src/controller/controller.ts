@@ -1,7 +1,7 @@
 import express from "express"
 import { Db, ObjectId } from "mongodb"
 import Database from "../config/database"
-import { User_Model } from "../model/user_model";
+import { Signup_Model, Login_Model } from "../model/user_model";
 
 
 
@@ -11,7 +11,7 @@ class UserController {
             let db: Db = Database.getDatabase();
 
             let userCollection = db.collection("users");
-            let body: User_Model = request.body;
+            let body: Signup_Model = request.body;
 
             const validation = { email: body.email };
             let checking = await userCollection.find(validation).toArray();
@@ -46,7 +46,7 @@ class UserController {
 
         let userCollection = db.collection("users");
 
-        let body: User_Model = request.body;
+        let body: Login_Model = request.body;
 
 
         const validation = {
