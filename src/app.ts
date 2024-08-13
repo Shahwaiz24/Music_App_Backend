@@ -9,13 +9,12 @@ app.use(express.json());
 
 
 const hostName = 'localhost'
-const port = 5000
+const port = parseInt(process.env.PORT as string, 10) || 5000;
 
-app.use('/v1/api/users', userRouting),
+app.use('/v1/api', userRouting),
 
 
-    app.listen(port, hostName, async () => {
+    app.listen(port, async () => {
         await Database.connectToDatabase();
-
-        console.log(`http://${hostName}:${port}/v1/api/users`)
-    })
+        console.log(`Server running on port ${port}/v1/api`);
+    });

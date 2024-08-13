@@ -1,9 +1,9 @@
 {
-  "name": "MONGODB",
+  "name": " Music-App-Back-End",
   "version": "1.0.0",
   "main": "src/server.ts",
   "scripts": {
-    "start": "nodemon src/app.ts"
+   "start": "node dist/app.js"
   },
   "keywords": [],
   "author": "",
