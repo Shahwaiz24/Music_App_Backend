@@ -9,6 +9,7 @@ class UserController {
     static async signup(request: express.Request, response: express.Response) {
         try {
             let db: Db = Database.getDatabase();
+
             let userCollection = db.collection("users");
             let body: User_Model = request.body;
 
@@ -33,7 +34,7 @@ class UserController {
         } catch (error) {
             console.error("Signup Error:", error);
             response.status(500).send({
-                "status": "Error",
+                "status": `${error}`,
                 "response": "An unexpected error occurred."
             });
         }
@@ -49,12 +50,14 @@ class UserController {
 
 
         const validation = {
-            email: body.email
+            email: body.email,
+            password: body.password
         }
 
         let checking = await userCollection.find(validation).toArray();
 
         if (checking.length != 0) {
+
             response.status(200).send({
                 "status": "Success",
                 "response": checking,
