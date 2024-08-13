@@ -1,9 +1,10 @@
 {
-  "name": " Music-App-Back-End",
+  "name": "Music-App-Back-End",
   "version": "1.0.0",
- "main": "dist/app.ts",
+  "main": "dist/app.js",
   "scripts": {
-   "start": "node dist/app.ts"
+    "build": "tsc",
+    "start": "node dist/app.js"
   },
   "keywords": [],
   "author": "",
