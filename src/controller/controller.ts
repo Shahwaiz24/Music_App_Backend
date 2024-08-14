@@ -8,7 +8,10 @@ import { Signup_Model, Login_Model } from "../model/user_model";
 class UserController {
     static async signup(request: express.Request, response: express.Response) {
         try {
-            let db: Db = Database.getDatabase();
+            let db = await Database.getDatabase();
+            if (!db) {
+                throw new Error('Database not connected');
+            }
 
             let userCollection = db.collection("users");
             let body: Signup_Model = request.body;
@@ -16,10 +19,10 @@ class UserController {
             const validation = { email: body.email };
             let checking = await userCollection.find(validation).toArray();
 
-            if (checking.length != 0) {
+            if (checking.length !== 0) {
                 response.status(403).send({
                     "status": "Failure",
-                    "response": "Email Already Exist"
+                    "response": "Email Already Exists"
                 });
             } else {
                 let responsedata = await userCollection.insertOne(body);
@@ -34,15 +37,16 @@ class UserController {
         } catch (error) {
             console.error("Signup Error:", error);
             response.status(500).send({
-                "status": `${error}`,
+                "status": "Error",
                 "response": "An unexpected error occurred."
             });
         }
     }
 
+
     static async login(request: express.Request, response: express.Response) {
 
-        let db: Db = Database.getDatabase();
+        let db: Db =  Database.getDatabase();
 
         let userCollection = db.collection("users");
 

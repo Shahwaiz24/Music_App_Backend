@@ -13,7 +13,13 @@ app.use(express_1.default.json());
 const hostName = 'localhost';
 const port = parseInt(process.env.PORT, 10) || 5000;
 app.use('/v1/api', routing_1.default),
-    app.listen(port, async () => {
-        await database_1.default.connectToDatabase();
-        console.log(`Server running on port ${port}/v1/api`);
+    database_1.default.connectToDatabase().then(() => {
+        console.log('Database connected successfully');
+        // Start the server only after the database is connected
+        app.listen(port, () => {
+            console.log(`Server is running on port ${port}`);
+        });
+    }).catch((error) => {
+        console.error('Database connection failed:', error);
+        process.exit(1); // Exit the process if database connection fails
     });

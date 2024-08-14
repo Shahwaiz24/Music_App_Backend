@@ -3,25 +3,28 @@ import { MongoClient, Db } from "mongodb";
 let database: Db;
 let url = 'mongodb://127.0.0.1:27017/';
 
-
-
 class Database {
-
-
     static async connectToDatabase() {
         try {
+            const client = new MongoClient(url);
 
-            let client = new MongoClient(url);
-            database = client.db("Music_App");
-            console.log("DataBase Connected Succesfuly");
+            // Establish the connection
+            await client.connect();
+            database = client.db("Music_App"); // Assign the connected database
 
+            console.log("Database Connected Successfully");
         } catch (e) {
-            console.log(`An error Occured ${e}`)
+            console.error(`An error occurred while connecting to the database: ${e}`);
+            throw new Error("Failed to connect to the database");
         }
     }
 
     static getDatabase() {
-        return database;
+        if (database) {
+            return database;
+        } else {
+            throw new Error("Database connection is not established. Please connect to the database first.");
+        }
     }
 }
 

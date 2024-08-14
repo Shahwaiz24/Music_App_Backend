@@ -8,15 +8,18 @@ const database_1 = __importDefault(require("../config/database"));
 class UserController {
     static async signup(request, response) {
         try {
-            let db = database_1.default.getDatabase();
+            let db = await database_1.default.getDatabase();
+            if (!db) {
+                throw new Error('Database not connected');
+            }
             let userCollection = db.collection("users");
             let body = request.body;
             const validation = { email: body.email };
             let checking = await userCollection.find(validation).toArray();
-            if (checking.length != 0) {
+            if (checking.length !== 0) {
                 response.status(403).send({
                     "status": "Failure",
-                    "response": "Email Already Exist"
+                    "response": "Email Already Exists"
                 });
             }
             else {
@@ -32,7 +35,7 @@ class UserController {
         catch (error) {
             console.error("Signup Error:", error);
             response.status(500).send({
-                "status": `${error}`,
+                "status": "Error",
                 "response": "An unexpected error occurred."
             });
         }
