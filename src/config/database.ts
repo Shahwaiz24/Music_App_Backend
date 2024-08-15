@@ -1,7 +1,7 @@
 import { MongoClient, Db } from "mongodb";
 
 let database: Db;
-let url = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/';
+let url = process.env.MONGODB_URI || "mongodb+srv://shahwaizafzal90:shahwaizafzal1122@cluster0.y735w.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 class Database {
     static async connectToDatabase() {
