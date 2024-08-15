@@ -8,7 +8,7 @@ const routing_1 = __importDefault(require("./Routing/routing"));
 const app_loger_1 = __importDefault(require("./App Loger/apploger"));
 const database_1 = __importDefault(require("./config/database"));
 const app = (0, express_1.default)();
-app.use(apploger_1.default);
+app.use(app_loger_1.default);
 app.use(express_1.default.json());
 const hostName = 'localhost';
 const port = parseInt(process.env.PORT, 10) || 5000;
