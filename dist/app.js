@@ -14,7 +14,7 @@ const hostName = 'localhost';
 const port = parseInt(process.env.PORT, 10) || 5000;
 app.use('/v1/api', routing_1.default),
     database_1.default.connectToDatabase().then(() => {
-        console.log('Database connected successfully');
+        // console.log('Database connected successfully');
         // Start the server only after the database is connected
         app.listen(port, () => {
             console.log(`Server is running on port ${port}`);

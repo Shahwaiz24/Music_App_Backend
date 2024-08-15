@@ -15,7 +15,7 @@ app.use('/v1/api' ,userRouting),
 
 
     Database.connectToDatabase().then(() => {
-        console.log('Database connected successfully');
+        // console.log('Database connected successfully');
 
         // Start the server only after the database is connected
         app.listen(port, () => {
