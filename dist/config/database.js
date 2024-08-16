@@ -8,7 +8,7 @@ class Database {
         try {
             const client = new mongodb_1.MongoClient(url);
             await client.connect();
-            database = client.db("Music_App"); // Assign the connected database
+            database = client.db("Music_App"); // Assign the connected 
             console.log("Database Connected Successfully");
         }
         catch (e) {

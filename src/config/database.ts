@@ -8,8 +8,8 @@ class Database {
         try {
             const client = new MongoClient(url);
             await client.connect();
-            database = client.db("Music_App"); // Assign the connected database
-            console.log("Database Connected Successfully");
+            database = client.db("Music_App"); // Assign the connected 
+      console.log("Database Connected Successfully");
         } catch (e) {
             console.error(`An error occurred while connecting to the database: ${e}`);
             throw new Error("Failed to connect to the database");
