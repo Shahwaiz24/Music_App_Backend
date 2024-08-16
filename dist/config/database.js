@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongodb_1 = require("mongodb");
 let database;
-let url = "mongodb+srv://shahwaizafzal90:shahwaizafzal1122@cluster0.y735w.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+let url = "mongodb+srv://shahwaizafzal90:shahwaizafzal1122@cluster0.y735w.mongodb.net/Music_App?retryWrites=true&w=majority&appName=Cluster0";
 class Database {
     static async connectToDatabase() {
         try {
@@ -17,11 +17,8 @@ class Database {
         }
     }
     static getDatabase() {
-        if (database) {
+        if (database != undefined) {
             return database;
-        }
-        else {
-            throw new Error("Database connection is not established. Please connect to the database first.");
         }
     }
 }
