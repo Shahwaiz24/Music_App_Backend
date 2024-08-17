@@ -7,81 +7,70 @@ const mongodb_1 = require("mongodb");
 const database_1 = __importDefault(require("../config/database"));
 class UserController {
     static async signup(request, response) {
-        let db = database_1.default.getDatabase();
-        if (db == undefined) {
-            try {
-                database_1.default.connectToDatabase();
-            }
-            catch (error) {
-                response.status(408).send({
-                    "status": "Failure",
-                    "response": error
-                });
-            }
-        }
-        else {
+        try {
+            let db = await database_1.default.getDatabase();
             let userCollection = db.collection("users");
             let body = request.body;
             // Validation should be performed here
             const validation = { email: body.email };
             let checking = await userCollection.find(validation).toArray();
-            if (checking.length !== 0) {
+            if (checking.length != 0) {
                 return response.status(403).send({
                     "status": "Failure",
                     "response": "Email Already Exists"
                 });
             }
-            // Insert user into the database
-            let responsedata = await userCollection.insertOne(body);
-            let User_Id = responsedata.insertedId;
-            let userData = await userCollection.find({ "_id": new mongodb_1.ObjectId(User_Id) }).toArray();
-            response.status(200).send({
-                "status": "Success",
-                "user": userData
+            else {
+                // Insert user into the database
+                let responsedata = await userCollection.insertOne(body);
+                let User_Id = responsedata.insertedId;
+                let userData = await userCollection.find({ "_id": new mongodb_1.ObjectId(User_Id) }).toArray();
+                response.status(200).send({
+                    "status": "Success",
+                    "user": userData
+                });
+            }
+        }
+        catch (error) {
+            console.error("Signup Error:", error instanceof Error ? error.message : error);
+            response.status(500).send({
+                "status": "Error",
+                "response": "An unexpected error occurred.",
+                "details": error instanceof Error ? error.message : "Unknown error"
             });
         }
-        // // Improved error handling
-        // console.error("Signup Error:", error instanceof Error ? error.message : error);
-        // response.status(500).send({
-        //     "status": "Error",
-        //     "response": "An unexpected error occurred.",
-        //     "details": error instanceof Error ? error.message : "Unknown error"
-        // });
     }
     static async login(request, response) {
-        response.status(200).send({
-            "status": 'Success',
-        });
-        //     try {
-        //         let db: Db = Database.getDatabase();
-        //         let userCollection = db.collection("users");
-        //         let body: Login_Model = request.body;
-        //         // Validation should be performed here
-        //         const validation = {
-        //             email: body.email,
-        //             password: body.password
-        //         };
-        //         let checking = await userCollection.find(validation).toArray();
-        //         if (checking.length !== 0) {
-        //             return response.status(200).send({
-        //                 "status": "Success",
-        //                 "response": checking,
-        //             });
-        //         }
-        //         response.status(403).send({
-        //             "status": "Failure",
-        //             "response": "Email Not Exist"
-        //         });
-        //     } catch (error: unknown) {
-        //         // Improved error handling
-        //         console.error("Login Error:", error instanceof Error ? error.message : error);
-        //         response.status(500).send({
-        //             "status": "Error",
-        //             "response": "An unexpected error occurred.",
-        //             "details": error instanceof Error ? error.message : "Unknown error"
-        //         });
-        //     }
-        // }
+        try {
+            let db = await database_1.default.getDatabase();
+            let userCollection = db.collection("users");
+            let body = request.body;
+            // Validation should be performed here
+            const validation = {
+                email: body.email,
+                password: body.password
+            };
+            let checking = await userCollection.find(validation).toArray();
+            if (checking.length !== 0) {
+                return response.status(200).send({
+                    "status": "Success",
+                    "response": checking,
+                });
+            }
+            response.status(403).send({
+                "status": "Failure",
+                "response": "Email Not Exist"
+            });
+        }
+        catch (error) {
+            // Improved error handling
+            console.error("Login Error:", error instanceof Error ? error.message : error);
+            response.status(500).send({
+                "status": "Error",
+                "response": "An unexpected error occurred.",
+                "details": error instanceof Error ? error.message : "Unknown error"
+            });
+        }
     }
 }
 exports.default = UserController;
