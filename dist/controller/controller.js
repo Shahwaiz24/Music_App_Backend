@@ -22,7 +22,17 @@ class UserController {
             }
             else {
                 // Insert user into the database
-                let responsedata = await userCollection.insertOne(body);
+                let insertingBody = {
+                    'fullname': body.fullname.toString(),
+                    'email': body.email.toString(),
+                    'password': body.password.toString(),
+                    'stats': {
+                        'Continue_Listening': 0,
+                        'Top_Mixes': 0,
+                        'Based On Recent Listening': 0,
+                    }
+                };
+                let responsedata = await userCollection.insertOne(insertingBody);
                 let User_Id = responsedata.insertedId;
                 let userData = await userCollection.find({ "_id": new mongodb_1.ObjectId(User_Id) }).toArray();
                 response.status(200).send({
