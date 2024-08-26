@@ -10,4 +10,6 @@ userRouting.post('/signup', controller_1.default.signup);
 userRouting.post('/login', controller_1.default.login);
 userRouting.get('/getArtist', controller_1.default.getArtist);
 userRouting.post('/createArtist', controller_1.default.createArtist);
+userRouting.get('/getToken', controller_1.default.getToken);
+userRouting.post('/updateToken', controller_1.default.updateToken);
 exports.default = userRouting;

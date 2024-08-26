@@ -132,5 +132,27 @@ class UserController {
             });
         }
     }
+    static async getToken(request, response) {
+        let db = await database_1.default.getDatabase();
+        let tokencollection = db.collection("spotify_tokens");
+        let token = await tokencollection.find().toArray();
+        response.status(200).send({
+            'Status': 'Success',
+            'token': token,
+        });
+    }
+    static async updateToken(request, response) {
+        let db = await database_1.default.getDatabase();
+        let newToken = request.body;
+        let tokencollection = db.collection("spotify_tokens");
+        let Deletetoken = await tokencollection.find().toArray();
+        await tokencollection.deleteOne(Deletetoken);
+        await tokencollection.insertOne(newToken);
+        let refreshToken = await tokencollection.find().toArray();
+        response.status(200).send({
+            'Status': 'Success',
+            'token': refreshToken
+        });
+    }
 }
 exports.default = UserController;

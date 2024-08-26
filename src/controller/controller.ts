@@ -160,6 +160,36 @@ class UserController {
             
         }
     }
+    static async getToken(request: express.Request, response: express.Response) {
+        let db: Db = await Database.getDatabase();
+
+        let tokencollection = db.collection("spotify_tokens");
+        let token = await tokencollection.find().toArray();
+
+        response.status(200).send({
+            'Status': 'Success',
+            'token' : token,
+        })
+
+    }
+    static async updateToken(request: express.Request, response: express.Response) {
+        let db: Db = await Database.getDatabase();
+
+        let newToken = request.body;
+
+        let tokencollection = db.collection("spotify_tokens");
+        let Deletetoken = await tokencollection.find().toArray();
+        await tokencollection.deleteOne(Deletetoken);
+        await tokencollection.insertOne(newToken);
+        let refreshToken = await tokencollection.find().toArray();
+
+        response.status(200).send({
+            'Status': 'Success',
+            'token' : refreshToken
+        })
+        
+
+    }
 
 
 }
