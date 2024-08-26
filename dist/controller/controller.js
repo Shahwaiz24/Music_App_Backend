@@ -82,5 +82,55 @@ class UserController {
             });
         }
     }
+    static async getArtist(request, response) {
+        try {
+            let db = await database_1.default.getDatabase();
+            let artistCollection = db.collection("artist_id");
+            let artists = await artistCollection.find().toArray();
+            if (!artists) {
+                artists = [];
+            }
+            response.status(200).send({
+                'Status Code': `Success`,
+                'artist': artists
+            });
+        }
+        catch (error) {
+            response.status(500).send({
+                'Error': 'An error occurred while fetching artists',
+                'Details': error
+            });
+        }
+    }
+    static async createArtist(request, response) {
+        try {
+            let db = await database_1.default.getDatabase();
+            let artistCollection = db.collection("artist_id");
+            let body = request.body;
+            let checking = {
+                artist_id: body.artist_id
+            };
+            let validation = await artistCollection.find(checking).toArray();
+            if (validation.length != 0) {
+                response.status(403).send({
+                    'Status': 'Failure',
+                    'response': "Artist Exist Already"
+                });
+            }
+            else {
+                let responsedata = await artistCollection.insertOne(body);
+                response.status(200).send({
+                    'Status': "Success",
+                    'response': "Artist Added Successfuly"
+                });
+            }
+        }
+        catch (error) {
+            response.status(500).send({
+                'Status': "Failure",
+                "response": error,
+            });
+        }
+    }
 }
 exports.default = UserController;

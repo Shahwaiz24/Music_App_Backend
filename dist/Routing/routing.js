@@ -8,4 +8,6 @@ const controller_1 = __importDefault(require("../controller/controller"));
 const userRouting = express_1.default.Router();
 userRouting.post('/signup', controller_1.default.signup);
 userRouting.post('/login', controller_1.default.login);
+userRouting.get('/getArtist', controller_1.default.getArtist);
+userRouting.post('/createArtist', controller_1.default.createArtist);
 exports.default = userRouting;

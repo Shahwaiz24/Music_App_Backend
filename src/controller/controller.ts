@@ -126,7 +126,7 @@ class UserController {
             });
         }
     }
-    static async postArtist(request: express.Request, response: express.Response) {
+    static async createArtist(request: express.Request, response: express.Response) {
         try {
             let db: Db = await Database.getDatabase();
 
