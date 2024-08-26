@@ -2,6 +2,7 @@ import express from "express";
 import { Db, ObjectId } from "mongodb";
 import Database from "../config/database";
 import { Signup_Model, Login_Model } from "../model/user_model";
+import { artistModel } from "../model/artist_model";
 
 class UserController {
     static async signup(request: express.Request, response: express.Response) {
@@ -100,7 +101,65 @@ class UserController {
                 });
             }
         }
-    
+    static async getArtist(request: express.Request, response: express.Response) {
+        try {
+            let db: Db = await Database.getDatabase();
+
+            let artistCollection = db.collection("artist_id");
+            let artists = await artistCollection.find().toArray();
+
+            if (!artists) {
+                artists = [];
+        }
+            
+
+            response.status(200).send({
+                'Status Code': `Success`,
+                'artist': artists
+            });
+
+
+        } catch (error) {
+            response.status(500).send({
+                'Error': 'An error occurred while fetching artists',
+                'Details': error
+            });
+        }
+    }
+    static async postArtist(request: express.Request, response: express.Response) {
+        try {
+            let db: Db = await Database.getDatabase();
+
+            let artistCollection = db.collection("artist_id");
+            let body: artistModel = request.body;
+            let checking = {
+                artist_id: body.artist_id
+            }
+            let validation = await artistCollection.find(checking).toArray();
+            if (validation.length != 0) {
+                response.status(403).send({
+                    'Status': 'Failure',
+                    'response' : "Artist Exist Already"
+                })
+            }
+            else {
+                let responsedata = await artistCollection.insertOne(body);
+                response.status(200).send({
+                    'Status': "Success",
+                    'response' : "Artist Added Successfuly"
+                })
+                
+            }
+            
+        } catch (error) {
+            response.status(500).send({
+                'Status': "Failure",
+                "response" : error,
+            })
+            
+            
+        }
+    }
 
 
 }
