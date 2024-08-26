@@ -142,17 +142,27 @@ class UserController {
         });
     }
     static async updateToken(request, response) {
-        let db = await database_1.default.getDatabase();
-        let newToken = request.body;
-        let tokencollection = db.collection("spotify_tokens");
-        let Deletetoken = await tokencollection.find().toArray();
-        await tokencollection.deleteOne(Deletetoken);
-        await tokencollection.insertOne(newToken);
-        let refreshToken = await tokencollection.find().toArray();
-        response.status(200).send({
-            'Status': 'Success',
-            'token': refreshToken
-        });
+        try {
+            let db = await database_1.default.getDatabase();
+            let newToken = request.body.token;
+            let tokencollection = db.collection("spotify_tokens");
+            // Delete the existing token (if any)
+            await tokencollection.deleteMany({});
+            // Insert the new token
+            await tokencollection.insertOne({ token: newToken });
+            // Fetch the newly inserted token to confirm
+            let refreshToken = await tokencollection.find().toArray();
+            response.status(200).send({
+                'Status': 'Success',
+                'token': refreshToken
+            });
+        }
+        catch (error) {
+            response.status(500).send({
+                'Status': 'Error',
+                'Message': error
+            });
+        }
     }
 }
 exports.default = UserController;

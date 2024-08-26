@@ -171,24 +171,33 @@ class UserController {
             'token' : token,
         })
 
-    }
-    static async updateToken(request: express.Request, response: express.Response) {
-        let db: Db = await Database.getDatabase();
+    } static async updateToken(request: express.Request, response: express.Response) {
+        try {
+            let db: Db = await Database.getDatabase();
 
-        let newToken = request.body;
+            let newToken = request.body.token;
+            let tokencollection = db.collection("spotify_tokens");
 
-        let tokencollection = db.collection("spotify_tokens");
-        let Deletetoken = await tokencollection.find().toArray();
-        await tokencollection.deleteOne(Deletetoken);
-        await tokencollection.insertOne(newToken);
-        let refreshToken = await tokencollection.find().toArray();
+            // Delete the existing token (if any)
+            await tokencollection.deleteMany({});
 
-        response.status(200).send({
-            'Status': 'Success',
-            'token' : refreshToken
-        })
-        
+            // Insert the new token
+            await tokencollection.insertOne({ token: newToken });
 
+            // Fetch the newly inserted token to confirm
+            let refreshToken = await tokencollection.find().toArray();
+
+            response.status(200).send({
+                'Status': 'Success',
+                'token': refreshToken
+            });
+
+        } catch (error) {
+            response.status(500).send({
+                'Status': 'Error',
+                'Message': error
+            });
+        }
     }
 
 
